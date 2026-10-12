@@ -1,4 +1,5 @@
-# docker-lab
+# docker-lab — DevOps cvičný projekt
+
 
 Cvičná FE/BE/DB aplikace z přípravy na DevOps pozici.
 
