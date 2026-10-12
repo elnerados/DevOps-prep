@@ -1,4 +1,4 @@
-# docker-lab
+# docker-lab (microservices demo)
 
 Cvičná FE/BE/DB aplikace z přípravy na DevOps pozici.
 
