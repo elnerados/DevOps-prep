@@ -18,3 +18,10 @@ docker compose up -d --build
 - `GET /api/time` — aktuální čas
 - `POST /api/visit` — zapíše návštěvu do DB
 - `GET /api/visits` — vypíše návštěvy z DB
+
+## Vývoj
+
+Lokálně:
+```bash
+docker compose up -d --build
+```
