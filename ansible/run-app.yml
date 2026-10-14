@@ -1,0 +1,22 @@
+---
+- name: Spustit aplikaci v docker
+  hosts: homelab
+  become: true
+  tasks:
+    - name: Zajisti že adresář pro aplikaci existuje
+      ansible.builtin.file:
+        path: /home/debian/app
+        state: directory
+
+    - name: Zkopírovat compose + backend soubory na server
+      ansible.builtin.copy:
+        src: "{{ item }}"
+        dest: /home/debian/app
+      loop:
+        - /Users/patrik/Desktop/Projects/DevopsPrep/docker-lab/docker-compose.yml
+        - /Users/patrik/Desktop/Projects/DevopsPrep/docker-lab/backend
+    
+    - name: Spustit docker-compose
+      ansible.builtin.command:
+        cmd: docker compose up -d --build 
+        chdir: /home/debian/app

@@ -1,0 +1,53 @@
+---
+- name: Nainstaluj Docker na server
+  hosts: homelab
+  become: true
+  tasks:
+    - name: Nainstaluj závislosti pro Docker repo
+      ansible.builtin.apt:
+        name:
+          - ca-certificates
+          - curl
+          - gnupg
+        state: present
+        update_cache: true
+
+    - name: Vytvoř adresář pro apt klíče
+      ansible.builtin.file:
+        path: /etc/apt/keyrings
+        state: directory
+        mode: "0755"
+
+    - name: Stáhni Docker GPG klíč
+      ansible.builtin.get_url:
+        url: https://download.docker.com/linux/debian/gpg
+        dest: /etc/apt/keyrings/docker.asc
+        mode: "0644"
+
+    - name: Přidej Docker apt repozitář
+      ansible.builtin.apt_repository:
+        repo: "deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/debian bookworm stable"
+        state: present
+        filename: docker
+
+    - name: Nainstaluj Docker Engine + Compose plugin
+      ansible.builtin.apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-compose-plugin
+        state: present
+        update_cache: true
+
+    - name: Zajisti že Docker služba běží a startuje při bootu
+      ansible.builtin.service:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Přidej uživatele debian do docker skupiny
+      ansible.builtin.user:
+        name: debian
+        groups: docker
+        append: true
