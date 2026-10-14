@@ -1,0 +1,17 @@
+---
+- name: Můj první playbook
+  hosts: homelab
+  become: false
+  tasks:
+    - name: Vytvoř adresář pro aplikaci
+      ansible.builtin.file:
+        path: /home/debian/myapp
+        state: directory
+        mode: "0755"
+
+    - name: Vytvoř konfigurační soubor
+      ansible.builtin.copy:
+        content: "app_version=1.0\nenv=production\n"
+        dest: /home/debian/myapp/config.ini
+        mode: "0644"
+
