@@ -16,7 +16,7 @@ services:
       retries: 5
 
   backend:
-    build: ./backend
+    image: registry.gitlab.com/mygroup2214542/devops-prep/backend:latest
     ports:
       - "8000:8000"
     depends_on:

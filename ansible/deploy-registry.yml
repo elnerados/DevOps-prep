@@ -1,0 +1,36 @@
+---
+- name: Deploy aplikace z GitLab registru
+  hosts: homelab
+  become: true
+  vars_prompt:
+    - name: registry_user
+      prompt: "GitLab deploy token username"
+      private: false
+    - name: registry_token
+      prompt: "GitLab deploy token (heslo)"
+      private: true
+  tasks:
+    - name: Vytvoř app adresář
+      ansible.builtin.file:
+        path: /home/debian/app
+        state: directory
+
+    - name: Zkopíruj compose soubor
+      ansible.builtin.copy:
+        src: ../docker-compose.yml
+        dest: /home/debian/app/docker-compose.yml
+
+    - name: Přihlas se do GitLab registru
+      ansible.builtin.command:
+        cmd: docker login registry.gitlab.com -u "{{ registry_user }}" -p "{{ registry_token }}"
+      no_log: true
+
+    - name: Stáhni image z registru
+      ansible.builtin.command:
+        cmd: docker compose pull
+        chdir: /home/debian/app
+
+    - name: Spusť aplikaci
+      ansible.builtin.command:
+        cmd: docker compose up -d
+        chdir: /home/debian/app
