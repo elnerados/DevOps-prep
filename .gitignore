@@ -14,3 +14,6 @@ venv/
 # Editor
 .vscode/
 .idea/
+
+# Server info
+ServerInfo.md
